@@ -20,5 +20,8 @@ public class MainGame {
 
 
         // Your code here. Good luck!
+
+        Board board = new Board();
+        board.createBoard();
     }
 }
