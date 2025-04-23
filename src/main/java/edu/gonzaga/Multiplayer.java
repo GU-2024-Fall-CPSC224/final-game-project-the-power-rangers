@@ -1,13 +1,6 @@
 package edu.gonzaga;
 
-public class Multiplayer {
-
-
-
-
-
-
-
-
+public class Multiplayer
+{
 
 }
