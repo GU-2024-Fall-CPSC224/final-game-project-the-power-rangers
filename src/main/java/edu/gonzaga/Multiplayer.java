@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Multiplayer
 {
-    private ArrayList<Player> players;
+    private ArrayList<Player> players = new ArrayList<>();
     private Player currentPlayer;
     private int match = 0;
 

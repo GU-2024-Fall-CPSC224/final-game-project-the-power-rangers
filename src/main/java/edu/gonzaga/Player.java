@@ -1,9 +1,13 @@
 package edu.gonzaga;
 
+import javax.swing.ImageIcon;
+
 public class Player
 {
     private String name;
     private int score = 0;
+    private Character piece;
+
 
     public Player(String name)
     {
@@ -21,5 +25,8 @@ public class Player
     public int getScore()
     {
         return score;
+    }
+    public Character getPiece(){
+        return piece;
     }
 }

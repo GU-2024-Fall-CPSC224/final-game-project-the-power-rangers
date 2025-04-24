@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,7 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class Board
+public class Board implements ActionListener
 {
 
     private int[][] Board = new int[3][3]; // Keep track of game logic
@@ -60,6 +62,7 @@ public class Board
             for (int col = 0; col < 3; col++)
             {
                 JButton button = new JButton();
+                button.addActionListener(this);
                 button.setFocusPainted(false);
                 button.setContentAreaFilled(true);
                 button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 2));
@@ -107,9 +110,17 @@ public class Board
         frame.setVisible(true);
     }
 
-    public static void updateMove()
+    public void updateMove(Multiplayer multiplayer)
     {
-
+        if(currentTurnIcon.getIcon() == xIcon){
+            // multiplayer.playTurn(0);
+            currentTurnIcon.setIcon(oIcon);
+            
+        }
+        else{
+            // multiplayer.playTurn(1);
+            currentTurnIcon.setIcon(xIcon);
+        }
     }
 
     public static void getWinner()
@@ -120,6 +131,19 @@ public class Board
     public static void checkBoard()
     {
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        for(int row = 0; row < 3; row++){
+            for(int col = 0; col < 3; col++){
+                if(e.getSource() == buttons[row][col]){
+                    buttons[row][col].setIcon(currentTurnIcon.getIcon());
+                    updateMove(null);
+                } 
+            }
+        }
+       
     }
 
 

@@ -25,5 +25,11 @@ public class MainGame
 
         Board board = new Board();
         board.createBoard();
+        Multiplayer multiplayer = new Multiplayer();
+        for(int i = 0; i <= 2; i++){ 
+            multiplayer.AddPlayer("Player " + i);
+        }
+        
+
     }
 }
