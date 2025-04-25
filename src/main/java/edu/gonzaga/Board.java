@@ -137,7 +137,7 @@ public class Board implements ActionListener
     public void actionPerformed(ActionEvent e) {
         for(int row = 0; row < 3; row++){
             for(int col = 0; col < 3; col++){
-                if(e.getSource() == buttons[row][col]){
+                if(e.getSource() == buttons[row][col] && buttons[row][col].getIcon() == null){
                     buttons[row][col].setIcon(currentTurnIcon.getIcon());
                     updateMove(null);
                 } 
