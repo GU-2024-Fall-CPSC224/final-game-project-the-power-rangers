@@ -52,6 +52,8 @@ public class Board implements ActionListener
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // ✅ Start in full screen
         frame.setResizable(true);                      // ✅ Allow manual resize
         frame.setLayout(new BorderLayout());
+
+
     
         // ==== Game Grid Panel ====
         JPanel gridPanel = new JPanel(new GridLayout(3, 3, 10, 10)); // spacing between buttons
@@ -110,7 +112,7 @@ public class Board implements ActionListener
         frame.setVisible(true);
     }
 
-    public void updateMove(Multiplayer multiplayer)
+    public void updateMove(int row, int col)
     {
         if(currentTurnIcon.getIcon() == xIcon){
             // multiplayer.playTurn(0);
@@ -121,16 +123,7 @@ public class Board implements ActionListener
             // multiplayer.playTurn(1);
             currentTurnIcon.setIcon(xIcon);
         }
-    }
-
-    public static void getWinner()
-    {
-
-    }
-
-    public static void checkBoard()
-    {
-
+        // multiplayer.makeMove(row, col);;
     }
 
     @Override
@@ -139,7 +132,7 @@ public class Board implements ActionListener
             for(int col = 0; col < 3; col++){
                 if(e.getSource() == buttons[row][col] && buttons[row][col].getIcon() == null){
                     buttons[row][col].setIcon(currentTurnIcon.getIcon());
-                    updateMove(null);
+                    updateMove(row, col);
                 } 
             }
         }
