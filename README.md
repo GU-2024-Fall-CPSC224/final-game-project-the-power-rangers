@@ -1,12 +1,12 @@
-# CPSC 224 Final Project: [Your project name here]
+# CPSC 224 Final Project: TikTakToe Tournament Game
 
 ### Project Description:
 
 
 ### Team Information:
 
-- Team Name:  
+- Team Name: Power Rangers
 - Students on team:
-- Semester: Spring 2024
+- Semester: Spring 2025
 
 
