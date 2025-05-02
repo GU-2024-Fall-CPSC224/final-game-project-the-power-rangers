@@ -90,19 +90,25 @@ public class Multiplayer
             || (x+y)%2 == 0 && currBoard[(x+1)%3][(y+1)%3] == fig && currBoard[(x+2)%3][(y+1)%3] == fig) // Diagonal
         {
             //scoring
+            
+
             if (fig == 1) // Player 1 win
             {
+                System.out.println("Flag 1 " + fig);
                 currentPlayer.incScore(1);
                 opponentPlayer.decScore(1);
             }
             else // Player 2 win
             {
+                System.out.println("Flag 2 " + fig);
                 opponentPlayer.incScore(1);
                 currentPlayer.decScore(1);
             }
+            System.out.println("Flag 5");
             // Next match and return win
-            if (nextMatch())
-                return 3; //Final win
+            // if (nextMatch())
+            //     return 3; //Final win
+            System.out.println("Flag 7  There is no final game");
             return 1; //win
         }
         //Check for full board
@@ -123,8 +129,8 @@ public class Multiplayer
             }
 
             // Next match and return tie
-            if (nextMatch())
-                return 4; //Final win with tie
+            // if (nextMatch())
+            //     return 4; //Final win with tie
             return 2; //Tie
         }
 
@@ -137,17 +143,22 @@ public class Multiplayer
         //If first match
         if(opponentPlayer == null)
         {
+            System.out.println("Flag 8 The oppenent == null");
             currentPlayer = head_playing;
         }
         else // Not first match
         {
+            System.out.println("Flag 9 The oppenent is real");
             currentPlayer = opponentPlayer.getNextPlayer();
         }
 
         //Check if this bracket ended
         if (currentPlayer == null || currentPlayer.getNextPlayer() == null)
         {
-            MakeNewBracket();
+            System.out.println("Flag 10 End of bracket");
+            // MakeNewBracket();
+            System.out.println("Flag 12 Bracket Created");
+
         }
 
         opponentPlayer = currentPlayer.getNextPlayer();
@@ -155,6 +166,7 @@ public class Multiplayer
         //Check if last player
         if(opponentPlayer == null)
         {
+            System.out.println("Flag 11  The oppenent player is null again??");
             return true;
         }
 
@@ -165,12 +177,16 @@ public class Multiplayer
         int neerest_power_2 = 1;
         while(neerest_power_2 * 2 <= num_players)
         {
+            System.out.println("Flag 13 Strange while loop");
+
             neerest_power_2 = neerest_power_2 * 2;
         }
 
         //sort
         currentPlayer = head;
         while (currentPlayer != null) {
+            System.out.println("Flag 14 Current player does exist {while loop}");
+            System.out.println("Flag 15 Dump Value" + currentPlayer.getNextPlayer().equals(head_playing));
             if (currentPlayer.getNextPlayer().equals(head_playing))
             {
                 break;

@@ -34,9 +34,9 @@ public class Board implements ActionListener
     private ImageIcon xIcon, oIcon;
     private JLabel playerXLabel, playerOLabel;
     private boolean isXTurn = true;
-    private JLabel currentTurnIcon;
+    private JLabel currentTurnIcon = new JLabel();
     private Multiplayer multiplayer;
-
+    private int p = 1;
     public Board(Multiplayer multiplayer){
         this.multiplayer = multiplayer;
     }
@@ -56,7 +56,7 @@ public class Board implements ActionListener
         {
             System.out.println("Could not load X and O images.");
         }
-    
+        currentTurnIcon.setIcon(xIcon);
         frame = new JFrame("Tic Tac Toe");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 750);
@@ -184,32 +184,39 @@ public class Board implements ActionListener
     {
         String name = "";
         int result = 0;
-        int p = 1;
 
         if(currentTurnIcon.getIcon() == xIcon){
             currentTurnIcon.setIcon(oIcon);
-            p = 2;
+            System.out.println("Flag 3  Xicon " + p);
         }
         else{
             currentTurnIcon.setIcon(xIcon);
+            System.out.println("Flag 4 oicon " + p);
         }
 
         result = multiplayer.updateMove(col, row, p);
-
+        System.out.println(p);
+        
         if(result == 1 || result == 3){
-            if(result == 1 || result == 3){
-                if(p == 1){
-                    name = multiplayer.GetPlayer().getName();
-                }
+            if(p == 1){
+                name = multiplayer.GetPlayer().getName();
             }
             else{
+                System.out.println("Flag 17");
                 name = multiplayer.GetOpponent().getName();
             }
         }
-
+        
+        System.out.println("Flag 6   The return result = "+ result);
         switch(result){
             case 0:
                 System.out.println("Game continues");
+                if(p == 1){
+                    p = 2;
+                }
+                else{
+                    p = 1;
+                }
                 break;
             case 1:
                 System.out.println(name + " Wins!");
@@ -230,6 +237,9 @@ public class Board implements ActionListener
             default:
                 System.out.println("error");
         }
+        
+        
+        
     }
 
     public void clearBoard(){
@@ -252,8 +262,9 @@ public class Board implements ActionListener
             for (int col = 0; col < 3; col++) {
                 if (e.getSource() == buttons[row][col] && buttons[row][col].getIcon() == null) {
                     buttons[row][col].setIcon(isXTurn ? xIcon : oIcon);
-                    isXTurn = !isXTurn;
                     updateTurnHighlight();
+                    updateMove(row, col);
+                    isXTurn = !isXTurn;
                 } 
             }
         }
