@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
@@ -208,9 +209,9 @@ public class Board implements ActionListener
         }
         
         System.out.println("Flag 6   The return result = "+ result);
+
         switch(result){
             case 0:
-                System.out.println("Game continues");
                 if(p == 1){
                     p = 2;
                 }
@@ -219,28 +220,29 @@ public class Board implements ActionListener
                 }
                 break;
             case 1:
-                System.out.println(name + " Wins!");
-                clearBoard();
+                showGameOverScreen(name + " Wins!");
                 break;
             case 2:
-                System.out.println("It's a tie!");
-                clearBoard();
+                showGameOverScreen("It's a tie!");
                 break;
                 case 3:
-                System.out.println("Final Winner: " + name);
-                clearBoard();
+                showGameOverScreen("Final Winner: " + name);
                 break;
             case 4:
-                System.out.println("Final round tie!");
-                clearBoard();
+                showGameOverScreen("Final round tie!");
                 break;
             default:
-                System.out.println("error");
+                showGameOverScreen("Unexpected error occured");
         }
         
         
         
     }
+    // SHow a game over message when the game ends
+    public void showGameOverScreen(String message) {
+        JOptionPane.showMessageDialog(frame, message, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
 
     public void clearBoard(){
         for(int row = 0; row < buttons.length; row++){
