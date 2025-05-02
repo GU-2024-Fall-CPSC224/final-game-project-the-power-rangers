@@ -69,10 +69,8 @@ public class Board implements ActionListener
         JPanel gridPanel = new JPanel(new GridLayout(3, 3, 10, 10)); // spacing between buttons
         gridPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // margin around grid
         buttons = new JButton[3][3];
-        for (int row = 0; row < 3; row++)
-        {
-            for (int col = 0; col < 3; col++)
-            {
+        for (int row = 0; row < 3; row++){
+            for (int col = 0; col < 3; col++){
                 JButton button = new JButton();
                 button.addActionListener(this);
                 button.setFocusPainted(false);
@@ -125,82 +123,80 @@ public class Board implements ActionListener
 
     public void updateMove(int row, int col)
     {
+        String name = "";
+        int result = 0;
+        int p = 1;
+
         if(currentTurnIcon.getIcon() == xIcon){
             currentTurnIcon.setIcon(oIcon);
-            int result = multiplayer.updateMove(col, row, 2);
-            if(result == 1){
-                System.out.println("Player 2 Wins!");
-                clearBoard();
-            }else if(result == 2){
-                System.out.println("It's a tie!");
-                clearBoard();
-            }
-            else if(result == 3){
-                System.out.println("Final Winner: Player 2!");
-                clearBoard();
-            }
-            else if(result == 4){
-                System.out.println("Final round tie!");
-                clearBoard();
-            }
-            else{
-                System.out.println("Unknown Result");
-            }
+            p = 2;
         }
         else{
-
             currentTurnIcon.setIcon(xIcon);
-            int result = multiplayer.updateMove(col, row, 1);
-            if(result == 1){
-                System.out.println("Player 1 Wins!");
-                clearBoard();
-            }else if(result == 2){
-                System.out.println("It's a tie!");
-                clearBoard();
-            }
-            else if(result == 3){
-                System.out.println("Final Winner: Player 1!");
-                clearBoard();
-            }
-            else if(result == 4){
-                System.out.println("Final round tie!");
-                clearBoard();
+        }
+
+        result = multiplayer.updateMove(col, row, p);
+
+        if(result == 1 || result == 3){
+            if(p == 1){
+                name = multiplayer.GetPlayer().getName();
             }
             else{
-                System.out.println("Game continues");
+                name = multiplayer.GetOpponent().getName();
             }
         }
-        // multiplayer.makeMove(row, col);;
+
+        switch(result){
+            case 0:
+                System.out.println("Game continues");
+                break;
+            case 1:
+                System.out.println(name + " Wins!");
+                clearBoard();
+                break;
+            case 2:
+                System.out.println("It's a tie!");
+                clearBoard();
+                break;
+            case 3:
+                System.out.println("Final Winner: " + name);
+                clearBoard();
+                break;
+            case 4:
+                System.out.println("Final round tie!");
+                clearBoard();
+                break;
+            default:
+                System.out.println("error");
+        }
     }
 
     public void clearBoard(){
-        for(int row = 0; row < buttons.length; row++){
-            for(int col = 0; col < buttons[0].length; col++){
-                buttons[row][col].setIcon(null);
+        for (JButton[] row : buttons){
+            for (JButton button : row){
+                button.setIcon(null);
             }
         }
+
         currentTurnIcon.setIcon(xIcon);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        for(int row = 0; row < 3; row++){
-            for(int col = 0; col < 3; col++){
-                if(e.getSource() == buttons[row][col] && buttons[row][col].getIcon() == null){
-                    buttons[row][col].setIcon(currentTurnIcon.getIcon());
-                    updateMove(row, col);
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource().getClass() == JButton.class) {
+            JButton b = ((JButton) e.getSource());
+
+            if(b.getIcon() == null){
+                b.setIcon(currentTurnIcon.getIcon());
+                for(int pos = 0; pos < 9; pos++){
+                    if(buttons[pos/3][pos%3] == b){
+                        updateMove(pos/3, pos%3);
+                    }
                 }
             }
+
         }
+
     }
-
-
-
-
-
-
-
-
-
 
 }
