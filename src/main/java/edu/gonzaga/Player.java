@@ -1,32 +1,60 @@
 package edu.gonzaga;
 
-import javax.swing.ImageIcon;
-
 public class Player
 {
-    private String name;
-    private int score = 0;
-    private Character piece;
+    // Player attributes
+    private String name = "";
+    private double score = 0;
+    private double score_diff = 0;
+    private Player next_player = null;
 
-
+    // Constructors
     public Player(String name)
     {
         this.name = name;
     }
-    public void incScore()
+
+    // Setters
+    public void setNextPlayer(Player next)
     {
-        score++;
+        next_player = next;
+    }
+    private void calcScoreDiff(Player opponent)
+    {
+        // Get opp score
+        double opp_score = opponent.getScore();
+
+        // Set score_diff
+        if (score < opp_score)
+            score_diff =  (opp_score - score)/2.0;
+        else
+            score_diff = (score - opp_score)/2.0;
+
+        //Round to 2 decimal spaces
+        score_diff = Math.round(score_diff*100.0)/100.0;
     }
 
+    // Score changes
+    public void incScore(double state)
+    {
+        score += score_diff + state;
+    }
+    public void decScore(double state)
+    {
+        score -= score_diff + state;
+    }
+
+    // Get player attributes
     public String getName()
     {
         return name;
     }
-    public int getScore()
+    public double getScore()
     {
         return score;
     }
-    public Character getPiece(){
-        return piece;
+    public Player getNextPlayer()
+    {
+        return next_player;
     }
 }

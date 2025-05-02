@@ -1,5 +1,6 @@
 package edu.gonzaga;
-
+import java.util.*;
+import java.util.function.Consumer;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -8,6 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 public class Board implements ActionListener
 {
@@ -30,6 +34,12 @@ public class Board implements ActionListener
     private ImageIcon xIcon;
     private ImageIcon oIcon;
     private JLabel currentTurnIcon;
+    private Multiplayer multiplayer;
+
+    public Board(Multiplayer multiplayer){
+        this.multiplayer = multiplayer;
+    }
+    
 
     public void createBoard()
     {
@@ -49,8 +59,8 @@ public class Board implements ActionListener
     
         frame = new JFrame("Tic Tac Toe");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // ✅ Start in full screen
-        frame.setResizable(true);                      // ✅ Allow manual resize
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setResizable(true);
         frame.setLayout(new BorderLayout());
 
 
@@ -112,18 +122,58 @@ public class Board implements ActionListener
         frame.setVisible(true);
     }
 
+
     public void updateMove(int row, int col)
     {
         if(currentTurnIcon.getIcon() == xIcon){
-            // multiplayer.playTurn(0);
             currentTurnIcon.setIcon(oIcon);
-            
+            int result = multiplayer.updateMove(col, row, 2);
+            if(result == 1){
+                System.out.println("Player 2 Wins!");
+            }else if(result == 2){
+                System.out.println("It's a tie!");
+                clearBoard();
+            }
+            else if(result == 3){
+                System.out.println("Final Winner: Player 2!");
+            }
+            else if(result == 4){
+                System.out.println("Final round tie!");
+            }
+            else{
+                System.out.println("Unknown Result");
+            }
         }
         else{
-            // multiplayer.playTurn(1);
+
             currentTurnIcon.setIcon(xIcon);
+            int result = multiplayer.updateMove(col, row, 1);
+            if(result == 1){
+                System.out.println("Player 1 Wins!");
+            }else if(result == 2){
+                System.out.println("It's a tie!");
+                clearBoard();
+            }
+            else if(result == 3){
+                System.out.println("Final Winner: Player 1!");
+            }
+            else if(result == 4){
+                System.out.println("Final round tie!");
+            }
+            else{
+                System.out.println("Unknown Result");
+            }
         }
         // multiplayer.makeMove(row, col);;
+    }
+
+    public void clearBoard(){
+        for(int row = 0; row < buttons.length; row++){
+            for(int col = 0; col < buttons[0].length; col++){
+                buttons[row][col].setIcon(null);
+            }
+        }
+        currentTurnIcon.setIcon(xIcon);
     }
 
     @Override
@@ -136,7 +186,6 @@ public class Board implements ActionListener
                 } 
             }
         }
-       
     }
 
 
