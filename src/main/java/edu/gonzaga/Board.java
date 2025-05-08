@@ -37,8 +37,10 @@ public class Board implements ActionListener
     private boolean isXTurn = true;
     private JLabel currentTurnIcon = new JLabel();
     private Multiplayer multiplayer;
+    private Menu startMenu;
     private int p = 1;
-    public Board(Multiplayer multiplayer){
+    public Board(Multiplayer multiplayer, Menu startMenu){
+        this.startMenu = startMenu;
         this.multiplayer = multiplayer;
     }
     
@@ -134,6 +136,7 @@ public class Board implements ActionListener
         mainMenuBtn.setPreferredSize(new Dimension(140, 40));
 
         newGameBtn.addActionListener(e -> resetBoard());
+        mainMenuBtn.addActionListener(e -> openMenu());
     
         // newGameBtn.setFont(new Font("Arial", Font.PLAIN, 18));
         // mainMenuBtn.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -169,6 +172,24 @@ public class Board implements ActionListener
                 buttons[row][col].setEnabled(true);
             }
         }
+        multiplayer.clearBoard();
+        currentTurnIcon.setIcon(xIcon);
+        p = 1;
+    }
+
+    private void openMenu(){
+        startMenu.optionScreen(names -> {
+            ArrayList<String> playerNames = startMenu.getPlayerNames();
+            int numPlayers = startMenu.getPlayerCount();
+            this.multiplayer = new Multiplayer(startMenu);
+            for(int i = 0; i < numPlayers; i++){
+                
+                multiplayer.AddPlayer(playerNames.get(i));
+            }
+            System.out.println("Flag 16: {Created new multiplayer}" + playerNames.toString());
+            frame.dispose();
+            multiplayer.startGame();
+        });
     }
     
     private void updateTurnHighlight() {
@@ -264,9 +285,10 @@ public class Board implements ActionListener
             for (int col = 0; col < 3; col++) {
                 if (e.getSource() == buttons[row][col] && buttons[row][col].getIcon() == null) {
                     buttons[row][col].setIcon(isXTurn ? xIcon : oIcon);
+                    isXTurn = !isXTurn;
                     updateTurnHighlight();
                     updateMove(row, col);
-                    isXTurn = !isXTurn;
+                    
                 } 
             }
         }

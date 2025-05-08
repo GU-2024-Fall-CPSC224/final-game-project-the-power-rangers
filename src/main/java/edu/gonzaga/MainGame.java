@@ -28,7 +28,7 @@ public class MainGame
             System.out.println("closed");
             ArrayList<String> playerNames = startMenu.getPlayerNames();
             int numPlayers = startMenu.getPlayerCount();
-            Multiplayer multiplayer = new Multiplayer();
+            Multiplayer multiplayer = new Multiplayer(startMenu);
             for(int i = 0; i < numPlayers; i++){
                 
                 multiplayer.AddPlayer(playerNames.get(i));

@@ -56,6 +56,8 @@ public class Menu implements ActionListener{
         selectionPanel.add(playerCountComboBox);
         mainPanel.add(selectionPanel, BorderLayout.WEST);
 
+        playerNames = new ArrayList();
+
  
         nameInputPanel = new JPanel();
         nameInputPanel.setLayout(new BoxLayout(nameInputPanel, BoxLayout.Y_AXIS));

@@ -14,12 +14,14 @@ public class Multiplayer
     private Player opponentPlayer;
     private int[][] currBoard = {{0, 0, 0}, {0, 0, 0},{0, 0, 0}};
     private Board visBoard;
+    private Menu startMenu;
 
     //number of players active
     private int num_players;
 
+
     // Constructor
-    public Multiplayer()
+    public Multiplayer(Menu startMenu)
     {
         head = null;
         tail = null;
@@ -31,7 +33,8 @@ public class Multiplayer
 
         //number of players
         num_players = 0;
-        visBoard = new Board(this);
+        visBoard = new Board(this, startMenu);
+        this.startMenu = startMenu;
     }
     public void startGame(){
         if(opponentPlayer == null){
@@ -135,6 +138,13 @@ public class Multiplayer
         }
 
         return 0; //No win
+    }
+    public void clearBoard(){
+        for(int i = 0; i < this.currBoard.length; i++){
+            for(int j = 0; j < this.currBoard[0].length; j++){
+                this.currBoard[i][j] = 0;
+            }
+        }
     }
     private boolean nextMatch() // true only if final player
     {
