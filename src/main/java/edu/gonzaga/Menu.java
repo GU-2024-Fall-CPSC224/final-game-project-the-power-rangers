@@ -50,7 +50,7 @@ public class Menu implements ActionListener{
         JLabel selectionLabel = new JLabel("Number of players:");
         selectionLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
-        playerCountComboBox = new JComboBox<>(new String[]{"2", "4", "16"});
+        playerCountComboBox = new JComboBox<>(new String[]{"2", "4", "8", "16"});
         playerCountComboBox.setFont(new Font("Arial", Font.PLAIN, 20));
         selectionPanel.add(selectionLabel);
         selectionPanel.add(playerCountComboBox);

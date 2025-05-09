@@ -15,6 +15,9 @@ public class Multiplayer
     private int[][] currBoard = {{0, 0, 0}, {0, 0, 0},{0, 0, 0}};
     private Board visBoard;
     private Menu startMenu;
+    private ArrayList<Player> playersList = new ArrayList<Player>();
+    private ArrayList<Player> tourneyList = new ArrayList<Player>();
+    private int roundNum = -1;
 
     //number of players active
     private int num_players;
@@ -37,10 +40,12 @@ public class Multiplayer
         this.startMenu = startMenu;
     }
     public void startGame(){
-        if(opponentPlayer == null){
+        if(playersList.size() > 1){
+            nextMatch();
+            System.out.println("Flag 17: {Player names}" + currentPlayer.getName() + " vs. "+ opponentPlayer.getName());
             visBoard.createBoard();
         }
-        nextMatch();
+        
         // visBoard.actionPerformed();
     }
 
@@ -51,30 +56,39 @@ public class Multiplayer
         Player newPlayer = new Player(playerName);
         num_players++;
 
-        //Set tail
-        if (tail != null)
-        {
-            tail.setNextPlayer(newPlayer);
-        }
-        tail = newPlayer;
+        playersList.add(newPlayer);
+        tourneyList.add(newPlayer);
 
-        //Set head if not pressent
-        if (head == null)
-        {
-            head = newPlayer;
-            currentPlayer = head;
-            head_playing = head;
-        }
+        
+
+        // //Set tail
+        // if (tail != null)
+        // {
+        //     tail.setNextPlayer(newPlayer);
+        // }
+        // tail = newPlayer;
+
+        // //Set head if not pressent
+        // if (head == null)
+        // {
+        //     head = newPlayer;
+        //     currentPlayer = head;
+        //     head_playing = head;
+        // }
     }
 
     // Get functions
-    public Player GetPlayer()
+    public Player getPlayer(int pos)
     {
-        return currentPlayer;
+        return playersList.get(pos);
     }
-    public Player GetOpponent()
+    public Player getOpponent()
     {
-        return opponentPlayer;
+        return playersList.get((roundNum + 1) % playersList.size());
+    }
+    public Player getCurrentPlayer()
+    {
+        return playersList.get(roundNum % playersList.size());
     }
 
     // Gameplay
@@ -100,12 +114,14 @@ public class Multiplayer
                 System.out.println("Flag 1 " + fig);
                 currentPlayer.incScore(1);
                 opponentPlayer.decScore(1);
+                playersList.remove(opponentPlayer);
             }
             else // Player 2 win
             {
                 System.out.println("Flag 2 " + fig);
                 opponentPlayer.incScore(1);
                 currentPlayer.decScore(1);
+                playersList.remove(currentPlayer);
             }
             System.out.println("Flag 5");
             // Next match and return win
@@ -146,116 +162,27 @@ public class Multiplayer
             }
         }
     }
-    private boolean nextMatch() // true only if final player
+    public boolean nextMatch() // true only if final player
     {
         int[][] currBoard = {{0, 0, 0}, {0, 0, 0},{0, 0, 0}};
         this.currBoard = currBoard;
-        //If first match
-        if(opponentPlayer == null)
-        {
-            System.out.println("Flag 8 The oppenent == null");
-            currentPlayer = head_playing;
-        }
-        else // Not first match
-        {
-            System.out.println("Flag 9 The oppenent is real");
-            currentPlayer = opponentPlayer.getNextPlayer();
-        }
-
-        //Check if this bracket ended
-        if (currentPlayer == null || currentPlayer.getNextPlayer() == null)
-        {
-            System.out.println("Flag 10 End of bracket");
-            // MakeNewBracket();
-            System.out.println("Flag 12 Bracket Created");
-
-        }
-
-        opponentPlayer = currentPlayer.getNextPlayer();
-
-        //Check if last player
-        if(opponentPlayer == null)
-        {
-            System.out.println("Flag 11  The oppenent player is null again??");
-            return true;
-        }
-
-        return false;
-    }
-    private void MakeNewBracket()
-    {
-        int neerest_power_2 = 1;
-        while(neerest_power_2 * 2 <= num_players)
-        {
-            System.out.println("Flag 13 Strange while loop");
-
-            neerest_power_2 = neerest_power_2 * 2;
-        }
-
-        //sort
-        currentPlayer = head;
-        while (currentPlayer != null) {
-            System.out.println("Flag 14 Current player does exist {while loop}");
-            System.out.println("Flag 15 Dump Value" + currentPlayer.getNextPlayer().equals(head_playing));
-            if (currentPlayer.getNextPlayer().equals(head_playing))
-            {
-                break;
+        roundNum++;
+        if(playersList.size() > 1){
+            System.out.println();
+            currentPlayer = getCurrentPlayer();
+            opponentPlayer = getOpponent();
+            
+            System.out.println(roundNum);
+            if(roundNum > 0){
+                System.out.println("Clear the Board");
+                visBoard.clearBoard();
             }
         }
-
-        while (currentPlayer.getNextPlayer() != null) {
-            Player min = currentPlayer;
-            Player prev_index = currentPlayer.getNextPlayer();
-
-            // Find the minimum element in the unsorted part of the list
-            while (prev_index.getNextPlayer() != null)
-            {
-                if (prev_index.getNextPlayer().getScore() < min.getNextPlayer().getScore())
-                {
-                    min = prev_index;
-                }
-                prev_index = prev_index.getNextPlayer();
-            }
-            // Swap the minimum element with the current element
-            Player temp = currentPlayer.getNextPlayer();
-            currentPlayer.setNextPlayer(min.getNextPlayer());
-            min.setNextPlayer(temp);
-            Player temp_2 = currentPlayer.getNextPlayer().getNextPlayer();
-            currentPlayer.getNextPlayer().setNextPlayer(temp.getNextPlayer());
-            temp.setNextPlayer(temp_2);
-            // Move to the next node
-            currentPlayer = currentPlayer.getNextPlayer();
+        else{
+            System.out.println("FLAG 19: GAME OVER");
+            visBoard.tourneyWinner(playersList.get(0), tourneyList);
         }
-
-        // get new bracket size
-        currentPlayer = head_playing;
-        if (neerest_power_2 == num_players)
-        {
-            num_players = num_players/2;
-            neerest_power_2 = num_players;
-        }
-        else
-        {
-            num_players = neerest_power_2;
-        }
-
-        //Get the last numplayers players
-        while (currentPlayer != null)
-        {
-            if(neerest_power_2 == 0)
-            {
-                head_playing = head_playing.getNextPlayer();
-            }
-            else
-            {
-                neerest_power_2--;
-            }
-
-            currentPlayer = currentPlayer.getNextPlayer();
-            tail = currentPlayer;
-        }
-
-        //set new values
-        currentPlayer = head_playing;
+        
+        return true;
     }
 }

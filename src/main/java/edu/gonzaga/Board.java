@@ -39,6 +39,8 @@ public class Board implements ActionListener
     private Multiplayer multiplayer;
     private Menu startMenu;
     private int p = 1;
+    private JOptionPane optionPane;
+
     public Board(Multiplayer multiplayer, Menu startMenu){
         this.startMenu = startMenu;
         this.multiplayer = multiplayer;
@@ -221,11 +223,11 @@ public class Board implements ActionListener
         
         if(result == 1 || result == 3){
             if(p == 1){
-                name = multiplayer.GetPlayer().getName();
+                name = multiplayer.getCurrentPlayer().getName();
             }
             else{
                 System.out.println("Flag 17");
-                name = multiplayer.GetOpponent().getName();
+                name = multiplayer.getOpponent().getName();
             }
         }
         
@@ -261,10 +263,19 @@ public class Board implements ActionListener
     }
     // SHow a game over message when the game ends
     public void showGameOverScreen(String message) {
-        JOptionPane.showMessageDialog(frame, message, "Game Over", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
+        optionPane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_OPTION);
+        optionPane.setVisible(true);
+        int result = optionPane.showOptionDialog(frame, message, "Round Over", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"Yes"}, "Yes");
+        
+        if(result == 0){
+            System.out.println("FLAG 18: New game sequence");
+            multiplayer.nextMatch();
+        }
+        System.out.println("MOVING ON");
 
+
+        
+    }
     public void clearBoard(){
         for(int row = 0; row < buttons.length; row++){
             for(int col = 0; col < buttons[0].length; col++){
@@ -272,6 +283,24 @@ public class Board implements ActionListener
             }
         }
         currentTurnIcon.setIcon(xIcon);
+    }
+
+    public void tourneyWinner(Player winner, ArrayList<Player> tourneyList){
+        String message = "Congrats " + winner.getName() + " has one the tournament! \n \n";
+        for(int i = 0; i < tourneyList.size(); i++){
+            message += tourneyList.get(i).getName() + ": " + tourneyList.get(i).getScore() + "\n";
+        }
+        optionPane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.OK_OPTION);
+        optionPane.setVisible(true);
+        int result = optionPane.showOptionDialog(frame, message, "Game Over", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"Play Again", "Quit"}, "Play Again");
+        
+        if(result == 0){
+            frame.dispose();
+            openMenu();
+        }
+        else{
+            System.exit(1);
+        }
     }
 
     @Override
